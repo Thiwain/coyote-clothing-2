@@ -100,11 +100,11 @@ function resetPw() {
 
     ajaxRequest(url, method, status, form)
         .then((result) => {
-            if (result == 'w') {
-                window.location = 'index.php';
-            } else {
+            if (result != 'w') {
                 document.getElementById('nPwWarn').className = 'text-danger';
                 document.getElementById('nPwWarn').innerHTML = result;
+            } else {
+                window.location = 'index.php';
             }
         })
         .catch((error) => {

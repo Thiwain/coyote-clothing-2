@@ -24,11 +24,11 @@
                     <h3 class="text-dark fw-bold mt-3">Forgot Password</h3>
                 </div>
             </div>
-            <p class="nPwWarn"></p>
             <div class="col-10 col-md-5 col-lg-3 gap-3">
+                <p class="" id="nPwWarn"></p>
                 <form id="resetPasswordFormS">
-                    <input type="password" class="form-control mt-3" placeholder="New Password" name="np"/>
-                    <input type="password" class="form-control mt-3" placeholder="Confirm Password" name="cp"/>
+                    <input type="password" class="form-control mt-3" placeholder="New Password" name="np" />
+                    <input type="password" class="form-control mt-3" placeholder="Confirm Password" name="cp" />
                 </form>
             </div>
             <div class="col-12 mt-3">
