@@ -87,38 +87,40 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <div class="form-group">
-                                                                <label>Email</label>
-                                                                <input class="form-control" type="text" placeholder="<?php echo $_SESSION["u"]["email"] ?>">
+                                                    <form id="saveProfileChangesForm">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Email</label>
+                                                                    <input class="form-control" type="text" value="<?php echo $_SESSION["u"]["email"] ?>" name="curemail">
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <div class="form-group">
-                                                                <label>Gender</label>
-                                                                <?php
-                                                                $rs = Database::search("SELECT * FROM `gender` WHERE `id`='" . $_SESSION["u"]["gender_id"] . "'");
-                                                                $d = $rs->fetch_assoc();
-                                                                ?>
-                                                                <input class="form-control" type="text" value="<?php echo $d['gender_name'] ?>" disabled>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label>Gender</label>
+                                                                    <?php
+                                                                    $rs = Database::search("SELECT * FROM `gender` WHERE `id`='" . $_SESSION["u"]["gender_id"] . "'");
+                                                                    $d = $rs->fetch_assoc();
+                                                                    ?>
+                                                                    <input class="form-control" type="text" value="<?php echo $d['gender_name'] ?>" disabled>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col mb-3">
-                                                            <div class="form-group">
-                                                                <label>Address</label>
-                                                                <?php
-                                                                $rs2 = Database::search("SELECT * FROM `user_address` WHERE `user_id`='" . $_SESSION["u"]["id"] . "'");
-                                                                $d2 = $rs2->fetch_assoc();
-                                                                ?>
-                                                                <textarea class="form-control" rows="5" placeholder="Your Address"><?php echo $d2['address'] ?></textarea>
+                                                        <div class="row">
+                                                            <div class="col mb-3">
+                                                                <div class="form-group">
+                                                                    <label>Address</label>
+                                                                    <?php
+                                                                    $rs2 = Database::search("SELECT * FROM `user_address` WHERE `user_id`='" . $_SESSION["u"]["id"] . "'");
+                                                                    $d2 = $rs2->fetch_assoc();
+                                                                    ?>
+                                                                    <textarea name="address" class="form-control" rows="5" placeholder="Your Address"><?php echo $d2['address'] ?></textarea>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                             <form action="" id="changePwCheck">
@@ -127,7 +129,7 @@
                                                         <div class="mb-2"><b>Change Password</b></div>
                                                         <div class="row">
                                                             <div class="col">
-                                                                <p class="text-danger">!</p>
+                                                                <p class="text-danger" id="chngPwWrn"></p>
 
                                                                 <div class="form-group">
                                                                     <label>Current Password</label>
@@ -181,7 +183,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="col d-flex justify-content-end">
-                                                <button class="btn btn-primary" type="submit">Save Changes</button>
+                                                <button class="btn btn-primary" id="saveProfileChanges">Save Changes</button>
                                             </div>
                                         </div>
 

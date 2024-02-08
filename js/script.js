@@ -38,14 +38,43 @@ document.getElementById("changePwCheck").addEventListener("submit", (event) => {
     event.preventDefault();
     // alert("Please enter");
     var form = new FormData(document.getElementById("changePwCheck"));
-    const url = 'changePwProcess.php';
-    const method = 'POST';
-    const status = true;
-    ajaxRequest(url, method, status, form)
-        .then((result) => {
-        })
-        .catch((error) => {
+    var warn = document.getElementById("chngPwWrn");
 
-        });
+    if (form.get('curpw') == "") {
+        warn.className = "text-danger";
+        warn.innerHTML = 'please fill the password';
+    } else if (form.get('newpw') == "") {
+        warn.className = "text-danger";
+        warn.innerHTML = 'please fill the new password';
+    } else if (form.get('repw') == "") {
+        warn.className = "text-danger";
+        warn.innerHTML = 'please confirm the password';
+    } else {
+
+        const url = 'changePwProcess.php';
+        const method = 'POST';
+        const status = true;
+
+        ajaxRequest(url, method, status, form)
+            .then((result) => {
+                if (result == 'Password is changed') {
+                    warn.className = "text-success";
+                    warn.innerHTML = result;
+                } else {
+                    warn.className = "text-danger";
+                    warn.innerHTML = result;
+                }
+            })
+            .catch((error) => {
+
+            });
+    }
 });
 // change pw verify
+
+//save profile changes 
+document.getElementById("saveProfileChanges").addEventListener("click", (event) => {
+    event.preventDefault();
+    alert("click");
+});
+//save profile changes
