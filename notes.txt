@@ -1,0 +1,41 @@
+
+/*
+GET Example 
+
+// signin.js
+
+document.addEventListener('DOMContentLoaded', function () {
+    var signInForm = document.getElementById('signin-form');
+
+    signInForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        // Create FormData object from the form
+        var formData = new FormData(signInForm);
+
+        // Extract email and password from FormData
+        var email = formData.get('email');
+        var password = formData.get('password');
+
+        // Perform AJAX GET request for sign-in
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'your-signin-endpoint-url?email=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password), true);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // Handle successful response
+                    console.log(xhr.responseText);
+                } else {
+                    // Handle error
+                    console.error(xhr.statusText);
+                }
+            }
+        };
+
+        xhr.send(formData);
+    });
+});
+
+
+*/
