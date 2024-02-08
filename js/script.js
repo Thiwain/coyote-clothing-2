@@ -91,3 +91,24 @@ document.getElementById("saveProfileChangesForm").addEventListener("submit", (ev
 
 });
 //save profile changes
+
+function resetPw() {
+    var form = new FormData(document.getElementById("resetPasswordFormS"));
+    const url = 'newPasswordProcess.php';
+    const method = 'POST';
+    const status = true;
+
+    ajaxRequest(url, method, status, form)
+        .then((result) => {
+            if (result == 'w') {
+                window.location = 'index.php';
+            } else {
+                document.getElementById('nPwWarn').className = 'text-danger';
+                document.getElementById('nPwWarn').innerHTML = result;
+            }
+        })
+        .catch((error) => {
+
+        });
+}
+

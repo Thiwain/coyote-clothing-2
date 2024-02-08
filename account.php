@@ -202,7 +202,7 @@
                     <div class="modal-body">
                         <div class="form-group mb-3">
                             <label class="label" for="name">Type your email to get veification code</label>
-                            <p class="text-danger" id="fpwMoadlWrn">dd</p>
+                            <p class="text-danger" id="fpwMoadlWrn"></p>
                             <div class="row">
                                 <div class="col-10 offset-1">
                                     <div class="row gap-2">

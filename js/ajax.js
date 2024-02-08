@@ -1,3 +1,22 @@
+//ajaxFunction
+function ajaxRequest(reqUrl, method, sts, ajaxform) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, reqUrl, sts);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    resolve(xhr.responseText);
+                } else {
+                    reject(xhr.statusText);
+                }
+            }
+        };
+        xhr.send(ajaxform);
+    });
+}
+//ajaxFunction
+
 document.addEventListener('DOMContentLoaded', () => {
     //forms
     const signInForm = document.getElementById('signinForm');
@@ -5,34 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const signUpForm = document.getElementById('signupForm');
     //forms
 
-    //ajaxFunction
-    function ajaxRequest(reqUrl, method, sts, ajaxform) {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.open(method, reqUrl, sts);
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        resolve(xhr.responseText);
-                        reqUrl = null;
-                        method = null;
-                        sts = null;
-                        form = null;
-                    } else {
-                        reject(xhr.statusText);
-                        reqUrl = null;
-                        method = null;
-                        sts = null;
-                        form = null;
-                    }
-                }
-            };
-            xhr.send(ajaxform);
-        });
-    }
-    //ajaxFunction
-
-    //validtion
+    //validation
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
@@ -58,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("signInWarn").innerHTML = "Password must be at least 6 characters long";
             return;
         } else {
-
             var url = 'signInProcess.php';
             var method = 'POST';
             var status = true;
@@ -92,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("fpwMoadlWrn").innerHTML = "Invalid email format";
             return;
         } else {
-
             var url = 'sendVcodeProcess.php';
             var method = 'POST';
             var status = true;
@@ -132,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById("fpwMoadlWrn").innerHTML = result;
                     document.getElementById("fpwMoadlWrn").className = "text-success";
                     console.log(result);
-                    window.location = 'index.php';
+                    window.location = 'resetpassword.php';
                 })
                 .catch((error) => {
                     document.getElementById("fpwMoadlWrn").innerHTML = error;
@@ -166,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
     // sign up
-    
+
+
 
 });
