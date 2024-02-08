@@ -73,8 +73,21 @@ document.getElementById("changePwCheck").addEventListener("submit", (event) => {
 // change pw verify
 
 //save profile changes 
-document.getElementById("saveProfileChanges").addEventListener("click", (event) => {
+document.getElementById("saveProfileChangesForm").addEventListener("submit", (event) => {
     event.preventDefault();
-    alert("click");
+
+    var form = new FormData(document.getElementById("saveProfileChangesForm"));
+    const url = 'saveProfilechanges.php';
+    const method = 'POST';
+    const status = true;
+
+    ajaxRequest(url, method, status, form)
+        .then((result) => {
+            alert(result)
+        })
+        .catch((error) => {
+
+        });
+
 });
 //save profile changes

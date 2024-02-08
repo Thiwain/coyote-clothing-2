@@ -114,12 +114,22 @@
                                                                     <label>Address</label>
                                                                     <?php
                                                                     $rs2 = Database::search("SELECT * FROM `user_address` WHERE `user_id`='" . $_SESSION["u"]["id"] . "'");
-                                                                    $d2 = $rs2->fetch_assoc();
                                                                     ?>
-                                                                    <textarea name="address" class="form-control" rows="5" placeholder="Your Address"><?php echo $d2['address'] ?></textarea>
+                                                                    <textarea name="address" class="form-control" rows="5" placeholder="Your Address"><?php
+                                                                                                                                                        if ($rs2->num_rows != 0) {
+                                                                                                                                                            $d2 = $rs2->fetch_assoc();
+                                                                                                                                                            echo $d2['address'];
+                                                                                                                                                        }
+                                                                                                                                                        ?></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="row mb-2">
+                                                            <div class="col d-flex justify-content-end">
+                                                                <button type="submit" class="btn btn-primary" id="saveProfileChanges">Save Changes</button>
+                                                            </div>
+                                                        </div>
+
                                                     </form>
                                                 </div>
                                             </div>
@@ -179,11 +189,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col d-flex justify-content-end">
-                                                <button class="btn btn-primary" id="saveProfileChanges">Save Changes</button>
                                             </div>
                                         </div>
 
