@@ -42,5 +42,6 @@ if (empty($np)) {
 } else {
     $email = $_SESSION["u"]["email"];
     Database::iud("UPDATE `user` SET `password` = '$np' WHERE `email` = '$email'");
+    $_SESSION["u"]["password"] = $np;
     echo 'w';
 }
