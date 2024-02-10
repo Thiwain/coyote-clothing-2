@@ -112,3 +112,25 @@ function resetPw() {
         });
 }
 
+function toSPV(id) {
+    alert(id);
+    const url = 'singleProductView.php?id=' + id;
+    window.location = url;
+}
+
+function addToCartHome(pid) {
+    // alert(pid);
+    var form = new FormData();
+    form.append('pid', pid);
+    const url = 'addToCartHomeProcess.php';
+    const method = 'POST';
+    const status = true;
+
+    ajaxRequest(url, method, status, form)
+        .then((result) => {
+            alert(result)
+        })
+        .catch((error) => {
+
+        });
+}

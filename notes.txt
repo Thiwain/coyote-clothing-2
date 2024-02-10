@@ -140,3 +140,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                                     <span class="card-text text-primary">Rs. <?php echo $product_data["price"]; ?> .00</span> <br />
 
                                                     <?php
+
+
+
+                                                    
+
+    r.open("GET", "buyNowProcess.php?id=" + id + "&qty=" + qty, true)
+    r.send();

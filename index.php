@@ -177,18 +177,17 @@
                     $product_data = $product_rs->fetch_assoc();
                 ?>
 
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix <?php echo $product_data['list_class'] ?>">
+                    <div onclick="" class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix <?php echo $product_data['list_class'] ?>">
                         <div class="product__item">
                             <div class="product__item__pic set-bg" data-setbg="<?php echo $product_data['product_img_path'] ?>">
                                 <ul class="product__hover">
                                     <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                                    <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                                    <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
+                                    <li><a href="#" onclick="toSPV(<?php echo $product_data['product_id'] ?>);"><img src="img/icon/search.png" alt=""></a></li>
                                 </ul>
                             </div>
                             <div class="product__item__text">
                                 <h6><?php echo $product_data['product_title'] ?></h6>
-                                <a href="#" class="add-cart">+ Add To Cart</a>
+                                <a href="#" class="add-cart" onclick="addToCartHome(<?php echo $product_data['product_id'] ?>);">+ Add To Cart</a>
                                 <div class="rating">
 
                                 </div>
