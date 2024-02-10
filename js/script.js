@@ -128,7 +128,9 @@ function addToCartHome(pid) {
 
     ajaxRequest(url, method, status, form)
         .then((result) => {
-            alert(result)
+            if (result == 'toSignUp') {
+                window.location ='account.php';
+            }
         })
         .catch((error) => {
 

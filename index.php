@@ -152,22 +152,16 @@
                 product.description AS product_description,
                 home_listing.id AS home_listing_id,
                 home_listing.list_class,
-                varient.product_id AS varient_product_id,
-                varient.vname AS varient_name,
-                varient.qty AS varient_qty,
-                varient.price AS varient_price,
                 product_img.product_id AS product_img_id,
                 product_img.path AS product_img_path
             FROM 
-                `product`
+                product
             INNER JOIN 
-                `home_listing` ON `home_listing`.`id` = `product`.`home_listing_id`
+                home_listing ON home_listing.id = product.home_listing_id
             INNER JOIN 
-                `varient` ON `product`.`id` = `varient`.`product_id`
-            INNER JOIN 
-                `product_img` ON `product`.`id` = `product_img`.`product_id`
+                product_img ON product.id = product_img.product_id
             ORDER BY 
-                `product`.`id` ASC
+                product.id ASC            
             ";
 
                 $product_rs = Database::search($product_search_q);
@@ -175,6 +169,12 @@
 
                 for ($z = 0; $z < $product_num; $z++) {
                     $product_data = $product_rs->fetch_assoc();
+
+                    $product_id = $product_data['product_id'];
+
+                    $vSearch = Database::search("SELECT * FROM varient WHERE product_id='$product_id' ORDER BY `id` ASC");
+                    $vSearch_data = $vSearch->fetch_assoc();
+
                 ?>
 
                     <div onclick="" class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix <?php echo $product_data['list_class'] ?>">
@@ -191,7 +191,7 @@
                                 <div class="rating">
 
                                 </div>
-                                <h5><?php echo $product_data['varient_price'] ?> LKR</h5>
+                                <h5><?php echo $vSearch_data['price'] ?> LKR</h5>
                             </div>
                         </div>
                     </div>
