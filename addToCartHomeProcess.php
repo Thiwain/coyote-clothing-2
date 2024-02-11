@@ -25,5 +25,5 @@ if (isset($_SESSION["u"])) {
         Database::iud("INSERT INTO `coyote_clothing`.`cart` (`user_id`, `product_id`, `varient_id`, `qty`) VALUES ('$user', '$pid', '$vid', 1)");
     }
 } else {
-    echo 'toSignUp';
+    echo 'toSignUp';-
 }
