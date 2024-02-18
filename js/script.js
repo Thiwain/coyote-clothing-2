@@ -118,7 +118,8 @@ function toSPV(id) {
     window.location = url;
 }
 
-function addToCartHome(pid) {
+function addToCartHome(pid, event) {
+    event.preventDefault();
     // alert(pid);
     var form = new FormData();
     form.append('pid', pid);
@@ -129,10 +130,15 @@ function addToCartHome(pid) {
     ajaxRequest(url, method, status, form)
         .then((result) => {
             if (result == 'toSignUp') {
-                window.location ='account.php';
+                window.location = 'account.php';
             }
         })
         .catch((error) => {
 
         });
 }
+
+function addtoCartSp(event) {
+    event.preventDefault();
+    alert("Add to cart");
+};

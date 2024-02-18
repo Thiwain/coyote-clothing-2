@@ -1,8 +1,19 @@
 <!doctype html>
 <html lang="en">
+<?php
+require 'connection.php';
+
+
+$pid = $_GET['id'];
+
+$product_search_q = "SELECT * FROM `product`WHERE `id`='$pid'";
+
+$product_rs = Database::search($product_search_q);
+$pdata1 = $product_rs->fetch_assoc();
+?>
 
 <head>
-    <title>Sign Up | Log in</title>
+    <title>Coyote | <?php echo $pdata1['product_title']; ?></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -38,37 +49,7 @@
     <?php include "header.php" ?>
 
     <?php
-    require 'connection.php';
-    ?>
 
-    <?php
-
-    $pid = $_GET['id'];
-
-    $product_search_q = "SELECT 
-product.id AS product_id,
-product.product_title,
-product.description AS product_description,
-home_listing.id AS home_listing_id,
-home_listing.list_class,
-varient.product_id AS varient_product_id,
-varient.vname AS varient_name,
-varient.qty AS varient_qty,
-varient.price AS varient_price,
-product_img.product_id AS product_img_id,
-product_img.path AS product_img_path
-FROM 
-`product`
-INNER JOIN 
-`home_listing` ON `home_listing`.`id` = `product`.`home_listing_id`
-INNER JOIN 
-`varient` ON `product`.`id` = `varient`.`product_id`
-INNER JOIN 
-`product_img` ON `product`.`id` = `product_img`.`product_id`
-WHERE `product`.`id`='$pid'
-ORDER BY 
-`product`.`id` ASC 
-";
     ?>
 
     <section class="shop-details">
@@ -146,21 +127,11 @@ ORDER BY
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
                         <div class="product__details__text">
-                            <h4>Hooded thermal anorak</h4>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                                <span> - 5 Reviews</span>
-                            </div>
+                            <h4><?php echo $pdata1['product_title']; ?></h4>
                             <h3>$270.00 <span>70.00</span></h3>
-                            <p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
-                                cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
-                                with placket.</p>
+                            <p><?php echo $pdata1['description']; ?></p>
                             <div class="product__details__option">
-                                <div class="product__details__option__size">
+                                <!-- <div class="product__details__option__size">
                                     <span>Size:</span>
                                     <label for="xxl">xxl
                                         <input type="radio" id="xxl">
@@ -174,55 +145,58 @@ ORDER BY
                                     <label for="sm">s
                                         <input type="radio" id="sm">
                                     </label>
+                                </div> -->
+
+                                <div class="product__details__option__size">
+                                    <span>Size:</span>
+                                    <?php
+                                    $varients_q = "SELECT * FROM `varient` WHERE `product_id`='$pid'";
+                                    $varients_rs = Database::search($varients_q);
+                                    $varients_num = $varients_rs->num_rows;
+
+                                    $varients_boolean = true;
+                                    $varients_active_sate;
+
+                                    for ($x = 0; $x < $varients_num; $x++) {
+                                        $list_varients = $varients_rs->fetch_assoc();
+                                        if ($varients_boolean == 'true') {
+                                            $varients_active_sate = "active";
+                                            $varients_boolean = false;
+                                        } else {
+                                            $varients_active_sate = null;
+                                        }
+
+                                    ?>
+                                        <label class="<?php echo $varients_active_sate; ?>" for="<?php echo $list_varients['vname']; ?>"><?php echo $list_varients['vname']; ?>
+                                            <input type="radio" id="<?php echo $list_varients['id']; ?>">
+                                        </label>
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
-                                <div class="product__details__option__color">
-                                    <span>Color:</span>
-                                    <label class="c-1" for="sp-1">
-                                        <input type="radio" id="sp-1">
-                                    </label>
-                                    <label class="c-2" for="sp-2">
-                                        <input type="radio" id="sp-2">
-                                    </label>
-                                    <label class="c-3" for="sp-3">
-                                        <input type="radio" id="sp-3">
-                                    </label>
-                                    <label class="c-4" for="sp-4">
-                                        <input type="radio" id="sp-4">
-                                    </label>
-                                    <label class="c-9" for="sp-9">
-                                        <input type="radio" id="sp-9">
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="product__details__cart__option">
-                                <div class="quantity">
-                                    <div class="pro-qty">
-                                        <input type="text" value="1">
+
+                                <div class="product__details__cart__option mt-3">
+                                    <div class="quantity">
+                                        <div class="pro-qty">
+                                            <input type="text" value="1">
+                                        </div>
                                     </div>
+                                    <a href="#" id="addToCartSp" onclick="addtoCartSp(event);" class="primary-btn">add to cart</a>
                                 </div>
-                                <a href="#" class="primary-btn">add to cart</a>
-                            </div>
-                            <div class="product__details__btns__option">
-                                <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
-                                <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
-                            </div>
-                            <div class="product__details__last__option">
-                                <h5><span>Guaranteed Safe Checkout</span></h5>
-                                <img src="img/shop-details/details-payment.png" alt="">
-                                <ul>
-                                    <li><span>SKU:</span> 3812912</li>
-                                    <li><span>Categories:</span> Clothes</li>
-                                </ul>
+                                <div class="product__details__last__option">
+                                    <h5><span>Guaranteed Safe Checkout</span></h5>
+                                    <img src="img/shop-details/details-payment.png" alt="">
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
     <!-- Shop Details Section End -->
 

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Sign Up | Log in</title>
+    <title>Coyote | Home</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -177,6 +177,7 @@
 
                 ?>
 
+
                     <div onclick="" class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix <?php echo $product_data['list_class'] ?>">
                         <div class="product__item">
                             <div class="product__item__pic set-bg" data-setbg="<?php echo $product_data['product_img_path'] ?>">
@@ -187,7 +188,7 @@
                             </div>
                             <div class="product__item__text">
                                 <h6><?php echo $product_data['product_title'] ?></h6>
-                                <a href="#" class="add-cart" onclick="addToCartHome(<?php echo $product_data['product_id'] ?>);">+ Add To Cart</a>
+                                <a href="#" class="add-cart" onclick="addToCartHome(<?php echo $product_data['product_id'] ?>,event);">+ Add To Cart</a>
                                 <div class="rating">
 
                                 </div>
