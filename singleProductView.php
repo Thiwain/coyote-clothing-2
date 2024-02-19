@@ -178,10 +178,10 @@ $pdata1 = $product_rs->fetch_assoc();
                                 <div class="product__details__cart__option mt-3">
                                     <div class="quantity">
                                         <div class="pro-qty">
-                                            <input type="text" value="1">
+                                            <input type="text" value="1" id="prdQty" />
                                         </div>
                                     </div>
-                                    <a href="#" id="addToCartSp" onclick="addtoCartSp(event);" class="primary-btn">add to cart</a>
+                                    <a href="#" id="addToCartSp" onclick="addtoCartSp(event,<?php echo $pid ?>);" class="primary-btn">add to cart</a>
                                 </div>
                                 <div class="product__details__last__option">
                                     <h5><span>Guaranteed Safe Checkout</span></h5>

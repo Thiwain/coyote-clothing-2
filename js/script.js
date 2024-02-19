@@ -138,13 +138,38 @@ function addToCartHome(pid, event) {
         });
 }
 
-function addtoCartSp(event) {
+function addtoCartSp(event, pid) {
     event.preventDefault();
 
     var activeRadioButton = document.querySelector('.product__details__option__size label.active input[type="radio"]');
 
     if (activeRadioButton) {
-        alert(activeRadioButton.id);
+
+        var varient = activeRadioButton.id;
+        var qty = document.getElementById('prdQty').value;
+
+        // alert(varient + ' ' + qty + ' ' + pid);
+
+        var form = new FormData();
+        form.append('pid', pid);
+        form.append('varient', varient);
+        form.append('qty', qty);
+        const url = 'addToCartProductProcess.php';
+        const method = 'POST';
+        const status = true;
+
+        ajaxRequest(url, method, status, form)
+            .then((result) => {
+                if (result != 'toSignUp') {
+                    alert(result);
+                } else {
+                    window.location = 'account.php';
+                }
+            })
+            .catch((error) => {
+
+            });
+
         activeRadioButton.checked = true;
     } else {
         console.log("No active radio button found.");
