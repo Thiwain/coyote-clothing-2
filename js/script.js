@@ -175,5 +175,11 @@ function addtoCartSp(event, pid) {
         console.log("No active radio button found.");
     }
 
-
 };
+
+function chngImg(event, url) {
+    event.preventDefault();
+    document.getElementById('mainImgPrdt').src = '' + url + '';
+}
+
+

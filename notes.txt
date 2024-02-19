@@ -147,3 +147,67 @@ document.addEventListener('DOMContentLoaded', function () {
 
     r.open("GET", "buyNowProcess.php?id=" + id + "&qty=" + qty, true)
     r.send();
+
+    
+                            <?php
+                            for ($z = 0; $z < $main_img_rs->num_rows; $z++) {
+                                $main_img_data = $main_img_rs->fetch_assoc();
+                            ?>
+
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#tabs-<?php echo $z; ?>" role="tab">
+                                        <div class="product__thumb__pic set-bg" data-setbg="<?php echo $main_img_data['img_path'] ?>">
+                                        </div>
+                                    </a>
+                                </li>
+
+                            <?php
+                            }
+                            ?>
+
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
+                                    <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-1.png">
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
+                                    <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-2.png">
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
+                                    <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-3.png">
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
+                                    <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-4.png">
+                                        <i class="fa fa-play"></i>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                <div class="product__details__pic__item">
+                                    <img src="img/shop-details/product-big-2.png" alt="">
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabs-2" role="tabpanel">
+                                <div class="product__details__pic__item">
+                                    <img src="img/shop-details/product-big-3.png" alt="">
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                <div class="product__details__pic__item">
+                                    <img src="img/shop-details/product-big.png" alt="">
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabs-4" role="tabpanel">
+                                <div class="product__details__pic__item">
+                                    <img src="img/shop-details/product-big.png" alt="">
+                                </div>
+                            </div>
