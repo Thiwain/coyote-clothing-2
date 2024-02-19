@@ -150,6 +150,7 @@
                 product.id AS product_id,
                 product.product_title,
                 product.description AS product_description,
+                product.price AS product_price,
                 home_listing.id AS home_listing_id,
                 home_listing.list_class,
                 product_img.product_id AS product_img_id,
@@ -192,7 +193,7 @@
                                 <div class="rating">
 
                                 </div>
-                                <h5><?php echo $vSearch_data['price'] ?> LKR</h5>
+                                <h5><?php echo $product_data['product_price'] ?> LKR</h5>
                             </div>
                         </div>
                     </div>

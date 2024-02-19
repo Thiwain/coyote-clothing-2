@@ -128,7 +128,7 @@ $pdata1 = $product_rs->fetch_assoc();
                     <div class="col-lg-8">
                         <div class="product__details__text">
                             <h4><?php echo $pdata1['product_title']; ?></h4>
-                            <h3>$270.00 <span>70.00</span></h3>
+                            <h3><?php echo $pdata1['price']; ?> LKR</h3>
                             <p><?php echo $pdata1['description']; ?></p>
                             <div class="product__details__option">
                                 <!-- <div class="product__details__option__size">
