@@ -140,5 +140,15 @@ function addToCartHome(pid, event) {
 
 function addtoCartSp(event) {
     event.preventDefault();
-    alert("Add to cart");
+
+    var activeRadioButton = document.querySelector('.product__details__option__size label.active input[type="radio"]');
+
+    if (activeRadioButton) {
+        alert(activeRadioButton.id);
+        activeRadioButton.checked = true;
+    } else {
+        console.log("No active radio button found.");
+    }
+
+
 };
