@@ -183,3 +183,22 @@ function chngImg(event, url) {
 }
 
 
+function cartDel(event, cid) {
+    event.preventDefault();
+
+    var form = new FormData();
+    form.append('cid', cid);
+    const url = 'deleteFromCart.php';
+    const method = 'POST';
+    const status = true;
+
+    ajaxRequest(url, method, status, form)
+        .then((result) => {
+            window.location.reload();
+
+        })
+        .catch((error) => {
+
+        });
+
+}

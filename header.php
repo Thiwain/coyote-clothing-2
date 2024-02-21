@@ -15,7 +15,14 @@
 				<li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
 				<li class="nav-item"><a href="#" class="nav-link">Shop</a></li>
 				<li class="nav-item"><a href="#" class="nav-link">About</a></li>
-				<li class="nav-item"><a href="#" class="nav-link">Cart</a></li>
+				<?php
+				if (isset($_SESSION["u"])) {
+				?>
+					<li class="nav-item"><a href="cart.php" class="nav-link">Cart</a></li>
+				<?php
+				}
+				?>
+
 				<div class="dropdown show">
 					<?php
 
