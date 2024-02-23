@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Coyote Clothing | Cart</title>
 
     <link href="resources/logo.png" rel="icon">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
@@ -68,8 +68,12 @@
                                         </div>
 
                                         <?php
+                                        $subTotal = null;
+
                                         for ($z = 0; $z < $cart_res->num_rows; $z++) {
                                             $cart_fetch = $cart_res->fetch_assoc();
+
+                                            $subTotal = $subTotal + $cart_fetch['product_price'] * $cart_fetch['qty'];
                                         ?>
                                             <!-- item -->
                                             <div class="card mb-3">
@@ -91,7 +95,7 @@
                                                                 </h5>
                                                             </div>
                                                             <div style="width: 80px;">
-                                                                <h5 class="mb-0"><?php echo $cart_fetch['product_price'] . 'LKR'; ?></h5>
+                                                                <h5 class="mb-0"><?php echo $cart_fetch['product_price'] * $cart_fetch['qty'] . 'LKR'; ?></h5>
                                                             </div>
                                                             <button class="btn btn-outline-light" onclick="cartDel(event,<?php echo $cart_fetch['cart_id']; ?>);" style="color: #cecece;">🗑️</button>
                                                         </div>
@@ -111,57 +115,76 @@
                                                     <h5 class="mb-0">Details</h5>
                                                 </div>
 
-                                                <form class="mt-4">
+                                                <form class="mt-4" id="checkOutForm">
                                                     <div class="form-outline form-white mb-4">
-                                                        <input type="text" id="typeName" class="form-control form-control-lg" siez="17" placeholder="Reciver's Name" name="rname" />
+                                                        <input type="text" id="typeName" class="form-control form-control-lg" siez="17" placeholder="Reciver's Name" value="<?php echo $_SESSION['u']['fname'] . " " . $_SESSION['u']['lname']; ?>" name="rname" />
                                                         <label class="form-label" for="typeName">Reciver's Name</label>
                                                     </div>
 
                                                     <div class="form-outline form-white mb-4">
-                                                        <input type="text" id="typeText" class="form-control form-control-lg" siez="17" placeholder="Mobile No." minlength="19" maxlength="19" name="rno" />
+                                                        <input type="text" id="typeText" class="form-control form-control-lg" siez="17" placeholder="Mobile No." minlength="10" maxlength="10" name="rno" />
                                                         <label class="form-label" for="typeText">Mobile Number</label>
                                                     </div>
 
                                                     <div class="row mb-4">
                                                         <div class="col-md-6">
                                                             <div class="form-outline form-white">
-                                                                <input type="text" id="typeExp" class="form-control form-control-lg" placeholder="Address" size="7" id="exp" minlength="7" maxlength="7" name="Address" />
+                                                                <?php
+                                                                $address_s_q = "SELECT * FROM user_address WHERE user_id='$uid'";
+                                                                $address_res = Database::search($address_s_q);
+                                                                $address = null;
+
+                                                                if ($address_res->num_rows >= 1) {
+                                                                    $adrs = $address_res->fetch_assoc();
+                                                                    $address = $adrs['address'];
+                                                                } else {
+                                                                    $address = null;
+                                                                }
+                                                                ?>
+                                                                <input type="text" id="typeExp" class="form-control form-control-lg" placeholder="Address" name="address" value="<?php echo $address; ?>" />
                                                                 <label class="form-label" for="typeExp">Address</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-outline form-white">
-                                                                <input type="email" id="typeText" class="form-control form-control-lg" placeholder="email" size="1" minlength="3" maxlength="3" />
+                                                                <input type="email" id="typeText" class="form-control form-control-lg" placeholder="email" value="<?php echo $_SESSION['u']['email'] ?>" name="email" />
                                                                 <label class="form-label" for="typeText">Email</label>
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </form>
 
                                                 <hr class="my-4">
 
+                                                <p>hi</p>
+                                                
                                                 <div class="d-flex justify-content-between">
                                                     <p class="mb-2">Subtotal</p>
-                                                    <p class="mb-2">$4798.00</p>
+                                                    <p class="mb-2"><?php echo $subTotal . 'LKR'; ?></p>
                                                 </div>
 
                                                 <div class="d-flex justify-content-between">
                                                     <p class="mb-2">Shipping</p>
-                                                    <p class="mb-2">$20.00</p>
+                                                    <?php
+                                                    $ship_q = "SELECT * FROM `shipping_charge`";
+                                                    $ship_res = Database::search($ship_q);
+                                                    $ship_fetch = $ship_res->fetch_assoc();
+                                                    $ship_charge = $ship_fetch['charge'];
+                                                    ?>
+                                                    <p class="mb-2"><?php echo $ship_charge; ?>LKR</p>
                                                 </div>
-
                                                 <div class="d-flex justify-content-between mb-4">
                                                     <p class="mb-2">Total(Incl. taxes)</p>
-                                                    <p class="mb-2">$4818.00</p>
+                                                    <p class="mb-2"><?php echo $ship_charge + $subTotal; ?>LKR</p>
                                                 </div>
 
-                                                <button type="button" class="btn btn-dark btn-block btn-lg">
+                                                <button type="button" onclick="submitCheckout('<?php echo $ship_charge + $subTotal; ?>');" class="btn btn-dark btn-block btn-lg">
                                                     <div class="d-flex justify-content-between">
-                                                        <span>$4818.00</span>
+                                                        <span><?php echo $ship_charge + $subTotal; ?>LKR</span>
                                                         <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span>
                                                     </div>
                                                 </button>
+
 
                                             </div>
                                         </div>

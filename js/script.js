@@ -202,3 +202,20 @@ function cartDel(event, cid) {
         });
 
 }
+
+function submitCheckout(total) {
+    var form = new FormData(document.getElementById("checkOutForm"));
+    form.append('total', total);
+    // alert(form.get("rno"));
+    const url = 'checkOutProcess.php';
+    const method = 'POST';
+    const status = true;
+
+    ajaxRequest(url, method, status, form)
+        .then((result) => {
+            alert(result);
+        })
+        .catch((error) => {
+
+        });
+}

@@ -157,6 +157,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     // sign up
 
-
-
 });
