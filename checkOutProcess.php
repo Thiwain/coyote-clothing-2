@@ -1,5 +1,9 @@
 <?php
 
+session_start();
+
+require 'connection.php';
+
 $total = $_POST['total'];
 $rname = $_POST['rname'];
 $rno = $_POST['rno'];
@@ -36,5 +40,47 @@ if (empty($total)) {
     INSERT INTO coyote_clothing.invoice_item (invoice_id, product_id, varient_id, qty) 
     VALUES (1, 1, 1, 2);
     */
+
+    function generateUniqueID($length = 7)
+    {
+        $min = pow(10, $length - 1);
+        $max = pow(10, $length) - 1;
+        $id = mt_rand($min, $max);
+        return $id;
+    }
+
+    $uniqueID = generateUniqueID();
+    $uid = $_SESSION["u"]["id"];
+    $currentDateTime = date("Y-m-d H:i:s");
+
+    $sts = true;
+
+    if ($sts == true) {
+        Database::iud("INSERT INTO coyote_clothing.invoice (id, user_id, order_sts_id, shipping_charge_id, total, datetime) 
+    VALUES ('$uniqueID' ,'$uid', 1, 1, '$total', '$currentDateTime')");
+        $sts = false;
+    }
+
+    if ($sts == false) {
+        $s_q_res = Database::search("SELECT * FROM `invoice` WHERE `invoice`.`id`='$uniqueID'");
+        $s_q_res_fetch = $s_q_res->fetch_assoc();
+        $in_id = $s_q_res_fetch['id'];
+
+        if ($s_q_res->num_rows > 0) {
+
+            $cart_res = Database::search("SELECT * FROM cart WHERE cart.user_id='$uid'");
+            $cart_count = $cart_res->num_rows;
+
+            for ($i = 0; $i < $cart_count; $i++) {
+                $cart_fetch = $cart_res->fetch_assoc();
+                Database::iud("INSERT INTO coyote_clothing.invoice_item (invoice_id, product_id, varient_id, qty) 
+                VALUES ('$in_id', '" . $cart_fetch['product_id'] . "', '" . $cart_fetch['varient_id'] . "', '" . $cart_fetch['qty'] . "')");
+            }
+            Database::iud("INSERT INTO coyote_clothing.shipping_related (invoice_id, mobile, address, r_name) 
+            VALUES ('$in_id', '$rno', '$address', '$rname')");
+            Database::iud("DELETE FROM cart WHERE user_id='$uid'");
+        }
+    }
+
     echo 'Validation successful. Proceed with further processing.';
 }

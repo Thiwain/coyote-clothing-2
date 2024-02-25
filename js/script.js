@@ -206,6 +206,7 @@ function cartDel(event, cid) {
 function submitCheckout(total) {
     var form = new FormData(document.getElementById("checkOutForm"));
     form.append('total', total);
+    form.append('email', document.getElementById("emailCheckout").value);
     // alert(form.get("rno"));
     const url = 'checkOutProcess.php';
     const method = 'POST';
