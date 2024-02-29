@@ -82,5 +82,5 @@ if (empty($total)) {
         }
     }
 
-    echo 'Validation successful. Proceed with further processing.';
+    echo $in_id;
 }

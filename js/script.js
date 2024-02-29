@@ -214,9 +214,14 @@ function submitCheckout(total) {
 
     ajaxRequest(url, method, status, form)
         .then((result) => {
-            alert(result);
+            if (/^\d{7}$/.test(result)) {
+                const url = 'invoice.php?id=' + result;
+                window.location = url;
+            } else {
+                alert(result);
+            }
         })
         .catch((error) => {
-
+            console.error("Error:", error);
         });
 }

@@ -161,7 +161,6 @@
 
                                                     <hr class="my-4">
 
-                                                    <p>hi</p>
 
                                                     <div class="d-flex justify-content-between">
                                                         <p class="mb-2">Subtotal</p>
