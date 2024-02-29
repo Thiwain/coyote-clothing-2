@@ -34,13 +34,7 @@ if (empty($total)) {
 } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo 'Invalid email format';
 } else {
-    /*
-    INSERT INTO coyote_clothing.invoice (user_id, order_sts_id, shipping_charge_id, total, datetime) 
-    VALUES (1, 1, 1, 100.00, '2024-02-23 12:00:00');
-    INSERT INTO coyote_clothing.invoice_item (invoice_id, product_id, varient_id, qty) 
-    VALUES (1, 1, 1, 2);
-    */
-
+    
     function generateUniqueID($length = 7)
     {
         $min = pow(10, $length - 1);
@@ -75,6 +69,9 @@ if (empty($total)) {
                 $cart_fetch = $cart_res->fetch_assoc();
                 Database::iud("INSERT INTO coyote_clothing.invoice_item (invoice_id, product_id, varient_id, qty) 
                 VALUES ('$in_id', '" . $cart_fetch['product_id'] . "', '" . $cart_fetch['varient_id'] . "', '" . $cart_fetch['qty'] . "')");
+
+                // Reduce quantity in varient table
+                Database::iud("UPDATE varient SET qty = qty - '" . $cart_fetch['qty'] . "' WHERE id = '" . $cart_fetch['varient_id'] . "'");
             }
             Database::iud("INSERT INTO coyote_clothing.shipping_related (invoice_id, mobile, address, r_name) 
             VALUES ('$in_id', '$rno', '$address', '$rname')");
