@@ -51,7 +51,7 @@ if (empty($total)) {
 
     if ($sts == true) {
         Database::iud("INSERT INTO coyote_clothing.invoice (id, user_id, order_sts_id, shipping_charge_id, total, datetime) 
-    VALUES ('$uniqueID' ,'$uid', 1, 1, '$total', '$currentDateTime')");
+    VALUES ('$uniqueID' ,'$uid', 2, 1, '$total', '$currentDateTime')");
         $sts = false;
     }
 
