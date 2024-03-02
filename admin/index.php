@@ -238,11 +238,33 @@
                                         </div>
                                     </div>
 
-                                    
+
 
                                 </div>
                             </div>
                         </div>
+
+                        <?php
+                        // Define the order status ID you want to search for
+                        $orderStatusID = 2;
+
+                        // Define the SQL query to search for orders with the specified order status ID
+                        $searchOrdersQuery = "SELECT * FROM coyote_clothing.invoice WHERE order_sts_id = $orderStatusID";
+
+                        // Execute the query using the Database class
+                        $result = Database::search($searchOrdersQuery);
+
+                        // Check if any orders were found
+                        if ($result->num_rows > 0) {
+                            // Output the details of each order found
+                            while ($row = $result->fetch_assoc()) {
+                                echo "Order ID: " . $row['id'] . ", User ID: " . $row['user_id'] . ", Total: " . $row['total'] . ", Date: " . $row['datetime'] . "<br>";
+                            }
+                        } else {
+                            echo "No orders found with order status ID $orderStatusID.";
+                        }
+                        ?>
+
 
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
