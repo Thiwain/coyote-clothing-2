@@ -157,6 +157,33 @@
                             </div>
                         </div>
 
+                        <!-- Earnings (Monthly) Card Example -->
+                        <?php
+                        $totalEarnsRs = Database::search("SELECT SUM(total) AS total_earnings
+                          FROM invoice
+                          ");
+
+                        $fetched_total_earn = $totalEarnsRs->fetch_assoc();
+
+                        $fetched_total_earn['total_earnings'];
+                        ?>
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Total Earnings </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">LKR <?php echo $fetched_total_earn['total_earnings']; ?></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <hr>
 
                         <div class="col-12">
@@ -177,25 +204,47 @@
                                     if ($result->num_rows > 0) {
                                         $row = $result->fetch_assoc();
                                         $trendingProductId = $row['product_id'];
-
-                                        // Output the top trending product ID
-                                        echo "Top trending product ID: $trendingProductId";
                                     } else {
                                         echo "No trending products found.";
                                     }
+
+                                    $trending_prd_search_rs = Database::search("SELECT 
+                                    p.id AS product_id,
+                                    p.product_title,
+                                    p.description,
+                                    p.price,
+                                    i.item_name,
+                                    pi.path AS product_image_path
+                                FROM 
+                                    product p
+                                INNER JOIN 
+                                    item i ON p.item_id = i.id
+                                INNER JOIN 
+                                    product_img pi ON p.id = pi.product_id
+                                WHERE 
+                                    p.id = '$trendingProductId';
+                                ");
+
+                                    $trending_rs = $trending_prd_search_rs->fetch_assoc();
+
                                     ?>
 
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Accordion -->
-                                        <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                            <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
+                                        <a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="1">
+                                            <h6 class="m-0 font-weight-bold text-primary">Trending: <?php echo $trending_rs['product_title']; ?></h6>
                                         </a>
+
                                         <!-- Card Content - Collapse -->
-                                        <div class="collapse show" id="collapseCardExample" style="">
+                                        <div class="collapse show" id="collapseCardExample1" style="">
                                             <div class="card-body">
-                                                This is a collapsable card example using Bootstrap's built in collapse
-                                                functionality. <strong>Click on the card header</strong> to see the card body
-                                                collapse and expand!
+
+                                                <img src="../<?php echo $trending_rs['product_image_path']; ?>" style="" class="col-2" alt="sad">
+                                                <br>
+                                                <br>
+                                                <h6 class="">Price LKR <b><?php echo $trending_rs['price']; ?></b></h6>
+                                                <br>
+                                                <?php echo $trending_rs['description']; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -217,23 +266,46 @@
                                         $mostSoldProductId = $row['product_id'];
 
                                         // Output the most sold product ID
-                                        echo "Most sold product ID: $mostSoldProductId";
                                     } else {
                                         echo "No products found.";
                                     }
+
+
+                                    $most_sold_prd_search_rs = Database::search("SELECT 
+                                    p.id AS product_id,
+                                    p.product_title,
+                                    p.description,
+                                    p.price,
+                                    i.item_name,
+                                    pi.path AS product_image_path
+                                FROM 
+                                    product p
+                                INNER JOIN 
+                                    item i ON p.item_id = i.id
+                                INNER JOIN 
+                                    product_img pi ON p.id = pi.product_id
+                                WHERE 
+                                    p.id = '$mostSoldProductId';
+                                ");
+
+                                    $most_sold_rs = $most_sold_prd_search_rs->fetch_assoc();
+
                                     ?>
 
                                     <div class="card shadow mb-4">
                                         <!-- Card Header - Accordion -->
-                                        <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                            <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
+                                        <a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                            <h6 class="m-0 font-weight-bold text-primary">Most Sold: <?php echo $most_sold_rs['product_title']; ?></h6>
                                         </a>
-                                        <!-- Card Content - Collapse -->
-                                        <div class="collapse show" id="collapseCardExample" style="">
+                                        <div class="collapse show" id="collapseCardExample2" style="">
                                             <div class="card-body">
-                                                This is a collapsable card example using Bootstrap's built in collapse
-                                                functionality. <strong>Click on the card header</strong> to see the card body
-                                                collapse and expand!
+                                                <img src="../<?php echo $most_sold_rs['product_image_path']; ?>" style="" class="col-2" alt="sad">
+                                                <br>
+                                                <br>
+                                                <h6 class="">Price LKR <b><?php echo $most_sold_rs['price']; ?></b></h6>
+                                                <br>
+                                                <?php echo $most_sold_rs['description']; ?>
+
                                             </div>
                                         </div>
                                     </div>
@@ -263,6 +335,9 @@
                         } else {
                             echo "No orders found with order status ID $orderStatusID.";
                         }
+
+
+
                         ?>
 
 

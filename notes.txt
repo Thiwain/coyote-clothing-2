@@ -211,3 +211,76 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <img src="img/shop-details/product-big.png" alt="">
                                 </div>
                             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ signInForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(signInForm);
+        var email = formData.get('email');
+        var password = formData.get('password');
+
+        if (!isValidEmail(email)) {
+            document.getElementById("signInWarn").innerHTML = "Invalid email format";
+            return;
+        } else if (!isValidPassword(password)) {
+            document.getElementById("signInWarn").innerHTML = "Password must be at least 6 characters long";
+            return;
+        } else {
+            var url = 'signInProcess.php';
+            var method = 'POST';
+            var status = true;
+            ajaxRequest(url, method, status, formData)
+                .then((result) => {
+                    console.log(result);
+                    if (result === 'present') {
+                        alert(result);//AFTER SIGNIN
+                        window.location = 'index.php';
+                    } else {
+                        document.getElementById("signInWarn").innerHTML = result;
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert(error);
+                });
+
+        }
+    });
+
+    //ajaxFunction
+function ajaxRequest(reqUrl, method, sts, ajaxform) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, reqUrl, sts);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    resolve(xhr.responseText);
+                } else {
+                    reject(xhr.statusText);
+                }
+            }
+        };
+        xhr.send(ajaxform);
+    });
+}
+//ajaxFunction
