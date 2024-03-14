@@ -46,4 +46,5 @@ if (isset($_GET["e"])) {
     } else {
         echo ("Email does not exists");
     }
+    
 }
