@@ -50,9 +50,39 @@ if (empty($total)) {
     $sts = true;
 
     if ($sts == true) {
+        // payment process
+        $fname = $_SESSION["u"]["fname"];
+        $lname = $_SESSION["u"]["lname"];
+        $array = array();
+        $merchant_id = "1221091";
+        $merchant_secret = "MTAwMDM0ODAwMTkxODEyMTM3NzE4MDU3NjE1MDc0MDA3MzAxMjg4";
+        $currency = "LKR";
+
+        $hash = strtoupper(
+            md5(
+                $merchant_id .
+                    $uniqueID .
+                    number_format($total, 2, '.', '') .
+                    $currency .
+                    strtoupper(md5($merchant_secret))
+            )
+        );
+
+        $array["id"] = $uniqueID;
+        $array["order_id"] = $uniqueID;
+        $array["items"] = $order_id;
+        $array["amount"] = $total; // in the payhere docs it's exptected to be amount
+        $array["first_name"] = $fname;
+        $array["last_name"] = $lname;
+        $array["contact_number"] = $rno; // refer to the line 5 (reciver's number)
+        $array["address"] = $address;
+        $array["email"] = $email;
+        $array["hash"] = $hash;
+
         Database::iud("INSERT INTO coyote_clothing.invoice (id, user_id, order_sts_id, shipping_charge_id, total, datetime) 
-    VALUES ('$uniqueID' ,'$uid', 2, 1, '$total', '$currentDateTime')");
+        VALUES ('$order_id' ,'$uid', 2, 1, '$total', '$currentDateTime')");
         $sts = false;
+        echo json_encode($array);
     }
 
     if ($sts == false) {

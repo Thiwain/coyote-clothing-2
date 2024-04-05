@@ -208,6 +208,8 @@
 
     <?php include "footer.php" ?>
 
+    <!-- payhere lib -->
+    <script type="text/javascript" src="https://www.payhere.lk/lib/payhere.js"></script>
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
