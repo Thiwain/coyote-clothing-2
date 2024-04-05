@@ -122,13 +122,13 @@
 
                                                     <form class="mt-4" id="checkOutForm">
                                                         <div class="form-outline form-white mb-4">
-                                                            <input type="text" id="typeName" class="form-control form-control-lg" siez="17" placeholder="Reciver's Name" value="<?php echo $_SESSION['u']['fname'] . " " . $_SESSION['u']['lname']; ?>" name="rname" />
-                                                            <label class="form-label" for="typeName">Reciver's Name</label>
+                                                            <input type="text" id="checkout-reciver-name" class="form-control form-control-lg" siez="17" placeholder="Reciver's Name" value="<?php echo $_SESSION['u']['fname'] . " " . $_SESSION['u']['lname']; ?>" name="rname" />
+                                                            <label class="form-label" for="checkout-reciver-name">Reciver's Name</label>
                                                         </div>
 
                                                         <div class="form-outline form-white mb-4">
-                                                            <input type="text" id="typeText" class="form-control form-control-lg" siez="17" placeholder="Mobile No." minlength="10" maxlength="10" name="rno" />
-                                                            <label class="form-label" for="typeText">Mobile Number</label>
+                                                            <input type="text" id="checkout-mobile-number" class="form-control form-control-lg" siez="17" placeholder="Mobile No." minlength="10" maxlength="10" name="rno" />
+                                                            <label class="form-label" for="checkout-mobile-number">Mobile Number</label>
                                                         </div>
 
                                                         <div class="row mb-4">
@@ -146,14 +146,14 @@
                                                                         $address = null;
                                                                     }
                                                                     ?>
-                                                                    <input type="text" id="typeExp" class="form-control form-control-lg" placeholder="Address" name="address" value="<?php echo $address; ?>" />
-                                                                    <label class="form-label" for="typeExp">Address</label>
+                                                                    <input type="text" id="checkout-address" class="form-control form-control-lg" placeholder="Address" name="address" value="<?php echo $address; ?>" />
+                                                                    <label class="form-label" for="checkout-address">Address</label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-outline form-white">
-                                                                    <input type="email" id="emailCheckout" disabled class="form-control form-control-lg" placeholder="email" value="<?php echo $_SESSION['u']['email'] ?>" name="email" />
-                                                                    <label class="form-label" for="typeText">Email</label>
+                                                                    <input type="email" id="checkout-email" disabled class="form-control form-control-lg" placeholder="email" value="<?php echo $_SESSION['u']['email'] ?>" name="email" />
+                                                                    <label class="form-label" for="checkout-email">Email</label>
                                                                 </div>
                                                             </div>
                                                         </div>

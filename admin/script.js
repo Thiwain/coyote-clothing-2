@@ -36,3 +36,63 @@ function deleteUser(user_id) {
       alert(error);
     });
 }
+
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+function sendVcodefn() {
+  var PwForm = document.getElementById("adminPwModal");
+  var formData = new FormData(PwForm);
+  var email = formData.get('email');
+
+  if (!isValidEmail(email)) {
+    document.getElementById("fpwMoadlWrn").innerHTML = "Invalid email format";
+    return;
+  } else {
+    var url = 'sendAdminVcodeProcess.php';
+    var method = 'POST';
+    var status = true;
+    ajaxRequest(url, method, status, formData)
+      .then((result) => {
+        document.getElementById("fpwMoadlWrn").className = "text-success";
+        document.getElementById("fpwMoadlWrn").innerHTML = result;
+        alert(result);
+        console.log(result);
+      })
+      .catch((error) => {
+        document.getElementById("fpwMoadlWrn").innerHTML = error;
+        alert(error);
+      });
+
+  }
+}
+
+// to the admin home 
+
+function adminHome() {
+  alert("admin home")
+  var fPwForm = document.getElementById("adminPwModal");
+  var formData = new FormData(fPwForm);
+  var email = formData.get('email');
+  var vcode = formData.get('vcode');
+
+  if (!isValidEmail(email)) {
+    document.getElementById("fpwMoadlWrn").innerHTML = "Invalid email format";
+  } else {
+    var url = 'vCodeVerifyProcess.php';
+    var method = 'POST';
+    var status = true;
+    ajaxRequest(url, method, status, formData)
+      .then((result) => {
+        // alert(result)
+        window.location.reload();
+      })
+      .catch((error) => {
+        document.getElementById("fpwMoadlWrn").innerHTML = error;
+        alert(error);
+      });
+  }
+
+}

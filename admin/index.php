@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php require 'connection.php'; ?>
+<?php
+session_start();
+require 'connection.php'; ?>
 
 <head>
 
@@ -26,189 +28,195 @@
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+    <?php
 
-        <?php include 'sidebar.php'; ?>
+    if (isset($_SESSION['au'])) {
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+    ?>
 
-            <!-- Main Content -->
-            <div id="content">
+        <!-- Page Wrapper -->
+        <div id="wrapper">
 
-                <!-- nav -->
-                <?php include 'nav.php'; ?>
-                <!-- nav -->
+            <?php include 'sidebar.php'; ?>
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                    </div>
+                <!-- Main Content -->
+                <div id="content">
 
-                    <!-- Content Row -->
-                    <div class="row">
+                    <!-- nav -->
+                    <?php include 'nav.php'; ?>
+                    <!-- nav -->
 
-                        <?php
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
 
-                        $monthquery = "SELECT MONTH(datetime) AS month, YEAR(datetime) AS year, SUM(total) AS monthly_earnings
+                        <!-- Page Heading -->
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        </div>
+
+                        <!-- Content Row -->
+                        <div class="row">
+
+                            <?php
+
+                            $monthquery = "SELECT MONTH(datetime) AS month, YEAR(datetime) AS year, SUM(total) AS monthly_earnings
           FROM coyote_clothing.invoice
           GROUP BY YEAR(datetime), MONTH(datetime)
           ORDER BY YEAR(datetime) DESC, MONTH(datetime) DESC";
 
-                        $result = Database::search($monthquery);
+                            $result = Database::search($monthquery);
 
-                        // Initialize an array to store monthly earnings
-                        $monthlyEarnings = array();
+                            // Initialize an array to store monthly earnings
+                            $monthlyEarnings = array();
 
-                        // Loop through the result set and store the earnings for each month
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $year = $row['year'];
-                            $month = $row['month'];
-                            $earnings = $row['monthly_earnings'];
+                            // Loop through the result set and store the earnings for each month
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $year = $row['year'];
+                                $month = $row['month'];
+                                $earnings = $row['monthly_earnings'];
 
-                            // Store earnings for the corresponding month and year
-                            $monthlyEarnings["$year-$month"] = $earnings;
-                        }
+                                // Store earnings for the corresponding month and year
+                                $monthlyEarnings["$year-$month"] = $earnings;
+                            }
 
-                        // Output monthly earnings
-                        foreach ($monthlyEarnings as $date => $earnings) {
-                            list($year, $month) = explode('-', $date);
-                        }
+                            // Output monthly earnings
+                            foreach ($monthlyEarnings as $date => $earnings) {
+                                list($year, $month) = explode('-', $date);
+                            }
 
-                        // Calculate total earnings for all months
-                        $totalEarnings = array_sum($monthlyEarnings);
+                            // Calculate total earnings for all months
+                            $totalEarnings = array_sum($monthlyEarnings);
 
 
-                        // Yearly
+                            // Yearly
 
-                        // Define the query for annual earnings
-                        $annualQuery = "SELECT YEAR(datetime) AS year, SUM(total) AS annual_earnings
+                            // Define the query for annual earnings
+                            $annualQuery = "SELECT YEAR(datetime) AS year, SUM(total) AS annual_earnings
                 FROM coyote_clothing.invoice
                 GROUP BY YEAR(datetime)
                 ORDER BY YEAR(datetime) DESC";
 
-                        // Execute the query using the Database class
-                        $result = Database::search($annualQuery);
+                            // Execute the query using the Database class
+                            $result = Database::search($annualQuery);
 
-                        // Initialize an array to store annual earnings
-                        $annualEarnings = array();
+                            // Initialize an array to store annual earnings
+                            $annualEarnings = array();
 
-                        // Loop through the result set and store the earnings for each year
-                        while ($row = $result->fetch_assoc()) {
-                            $year = $row['year'];
-                            $earnings = $row['annual_earnings'];
+                            // Loop through the result set and store the earnings for each year
+                            while ($row = $result->fetch_assoc()) {
+                                $year = $row['year'];
+                                $earnings = $row['annual_earnings'];
 
-                            // Store earnings for the corresponding year
-                            $annualEarnings[$year] = $earnings;
-                        }
+                                // Store earnings for the corresponding year
+                                $annualEarnings[$year] = $earnings;
+                            }
 
-                        // Output annual earnings
-                        foreach ($annualEarnings as $year => $earnings) {
-                        }
+                            // Output annual earnings
+                            foreach ($annualEarnings as $year => $earnings) {
+                            }
 
-                        // Calculate total earnings for all years
-                        $totalEarnings = array_sum($annualEarnings);
+                            // Calculate total earnings for all years
+                            $totalEarnings = array_sum($annualEarnings);
 
-                        // current week
-
-
-
-                        ?>
+                            // current week
 
 
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Earnings (Monthly) <?php echo "$year-$month: $earnings"; ?></div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">LKR <?php echo $totalEarnings; ?></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Earnings (Annual) <?php echo $year; ?> </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">LKR <?php echo $totalEarnings; ?></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            ?>
+
+
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Earnings (Monthly) <?php echo "$year-$month: $earnings"; ?></div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">LKR <?php echo $totalEarnings; ?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Earnings (Monthly) Card Example -->
-                        <?php
-                        $totalEarnsRs = Database::search("SELECT SUM(total) AS total_earnings
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Earnings (Annual) <?php echo $year; ?> </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">LKR <?php echo $totalEarnings; ?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Earnings (Monthly) Card Example -->
+                            <?php
+                            $totalEarnsRs = Database::search("SELECT SUM(total) AS total_earnings
                           FROM invoice
                           ");
 
-                        $fetched_total_earn = $totalEarnsRs->fetch_assoc();
+                            $fetched_total_earn = $totalEarnsRs->fetch_assoc();
 
-                        $fetched_total_earn['total_earnings'];
-                        ?>
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Earnings </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">LKR <?php echo $fetched_total_earn['total_earnings']; ?></div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                            $fetched_total_earn['total_earnings'];
+                            ?>
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Total Earnings </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">LKR <?php echo $fetched_total_earn['total_earnings']; ?></div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <hr>
+                            <hr>
 
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-10 offset-1 mt-2 mb-2">
-                                    <?php
-                                    // Define the query to get the top trending product ID
-                                    $trendingProductQuery = "SELECT product_id, SUM(qty) AS total_quantity_sold
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-10 offset-1 mt-2 mb-2">
+                                        <?php
+                                        // Define the query to get the top trending product ID
+                                        $trendingProductQuery = "SELECT product_id, SUM(qty) AS total_quantity_sold
                          FROM coyote_clothing.invoice_item
                          GROUP BY product_id
                          ORDER BY total_quantity_sold DESC
                          LIMIT 1";
 
-                                    // Execute the query using the Database class
-                                    $result = Database::search($trendingProductQuery);
+                                        // Execute the query using the Database class
+                                        $result = Database::search($trendingProductQuery);
 
-                                    // Fetch the top trending product ID
-                                    if ($result->num_rows > 0) {
-                                        $row = $result->fetch_assoc();
-                                        $trendingProductId = $row['product_id'];
-                                    } else {
-                                        echo "No trending products found.";
-                                    }
+                                        // Fetch the top trending product ID
+                                        if ($result->num_rows > 0) {
+                                            $row = $result->fetch_assoc();
+                                            $trendingProductId = $row['product_id'];
+                                        } else {
+                                            echo "No trending products found.";
+                                        }
 
-                                    $trending_prd_search_rs = Database::search("SELECT 
+                                        $trending_prd_search_rs = Database::search("SELECT 
                                     p.id AS product_id,
                                     p.product_title,
                                     p.description,
@@ -225,53 +233,53 @@
                                     p.id = '$trendingProductId';
                                 ");
 
-                                    $trending_rs = $trending_prd_search_rs->fetch_assoc();
+                                        $trending_rs = $trending_prd_search_rs->fetch_assoc();
 
-                                    ?>
+                                        ?>
 
-                                    <div class="card shadow mb-4">
-                                        <!-- Card Header - Accordion -->
-                                        <a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="1">
-                                            <h6 class="m-0 font-weight-bold text-primary">Trending: <?php echo $trending_rs['product_title']; ?></h6>
-                                        </a>
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Accordion -->
+                                            <a href="#collapseCardExample1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="1">
+                                                <h6 class="m-0 font-weight-bold text-primary">Trending: <?php echo $trending_rs['product_title']; ?></h6>
+                                            </a>
 
-                                        <!-- Card Content - Collapse -->
-                                        <div class="collapse show" id="collapseCardExample1" style="">
-                                            <div class="card-body">
+                                            <!-- Card Content - Collapse -->
+                                            <div class="collapse show" id="collapseCardExample1" style="">
+                                                <div class="card-body">
 
-                                                <img src="../<?php echo $trending_rs['product_image_path']; ?>" style="" class="col-2" alt="sad">
-                                                <br>
-                                                <br>
-                                                <h6 class="">Price LKR <b><?php echo $trending_rs['price']; ?></b></h6>
-                                                <br>
-                                                <?php echo $trending_rs['description']; ?>
+                                                    <img src="../<?php echo $trending_rs['product_image_path']; ?>" style="" class="col-2" alt="sad">
+                                                    <br>
+                                                    <br>
+                                                    <h6 class="">Price LKR <b><?php echo $trending_rs['price']; ?></b></h6>
+                                                    <br>
+                                                    <?php echo $trending_rs['description']; ?>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <?php
-                                    // Define the query to get the most sold product
-                                    $mostSoldProductQuery = "SELECT product_id, SUM(qty) AS total_quantity_sold
+                                        <?php
+                                        // Define the query to get the most sold product
+                                        $mostSoldProductQuery = "SELECT product_id, SUM(qty) AS total_quantity_sold
                          FROM coyote_clothing.invoice_item
                          GROUP BY product_id
                          ORDER BY total_quantity_sold DESC
                          LIMIT 1";
 
-                                    // Execute the query using the Database class
-                                    $result = Database::search($mostSoldProductQuery);
+                                        // Execute the query using the Database class
+                                        $result = Database::search($mostSoldProductQuery);
 
-                                    // Fetch the most sold product
-                                    if ($result->num_rows > 0) {
-                                        $row = $result->fetch_assoc();
-                                        $mostSoldProductId = $row['product_id'];
+                                        // Fetch the most sold product
+                                        if ($result->num_rows > 0) {
+                                            $row = $result->fetch_assoc();
+                                            $mostSoldProductId = $row['product_id'];
 
-                                        // Output the most sold product ID
-                                    } else {
-                                        echo "No products found.";
-                                    }
+                                            // Output the most sold product ID
+                                        } else {
+                                            echo "No products found.";
+                                        }
 
 
-                                    $most_sold_prd_search_rs = Database::search("SELECT 
+                                        $most_sold_prd_search_rs = Database::search("SELECT 
                                     p.id AS product_id,
                                     p.product_title,
                                     p.description,
@@ -288,268 +296,314 @@
                                     p.id = '$mostSoldProductId';
                                 ");
 
-                                    $most_sold_rs = $most_sold_prd_search_rs->fetch_assoc();
+                                        $most_sold_rs = $most_sold_prd_search_rs->fetch_assoc();
 
-                                    ?>
+                                        ?>
 
-                                    <div class="card shadow mb-4">
-                                        <!-- Card Header - Accordion -->
-                                        <a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                            <h6 class="m-0 font-weight-bold text-primary">Most Sold: <?php echo $most_sold_rs['product_title']; ?></h6>
-                                        </a>
-                                        <div class="collapse show" id="collapseCardExample2" style="">
-                                            <div class="card-body">
-                                                <img src="../<?php echo $most_sold_rs['product_image_path']; ?>" style="" class="col-2" alt="sad">
-                                                <br>
-                                                <br>
-                                                <h6 class="">Price LKR <b><?php echo $most_sold_rs['price']; ?></b></h6>
-                                                <br>
-                                                <?php echo $most_sold_rs['description']; ?>
+                                        <div class="card shadow mb-4">
+                                            <!-- Card Header - Accordion -->
+                                            <a href="#collapseCardExample2" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                                <h6 class="m-0 font-weight-bold text-primary">Most Sold: <?php echo $most_sold_rs['product_title']; ?></h6>
+                                            </a>
+                                            <div class="collapse show" id="collapseCardExample2" style="">
+                                                <div class="card-body">
+                                                    <img src="../<?php echo $most_sold_rs['product_image_path']; ?>" style="" class="col-2" alt="sad">
+                                                    <br>
+                                                    <br>
+                                                    <h6 class="">Price LKR <b><?php echo $most_sold_rs['price']; ?></b></h6>
+                                                    <br>
+                                                    <?php echo $most_sold_rs['description']; ?>
 
+                                                </div>
                                             </div>
                                         </div>
+
+
+
                                     </div>
-
-
-
                                 </div>
                             </div>
-                        </div>
 
-                        <?php
-                        // Define the order status ID you want to search for
-                        $orderStatusID = 2;
+                            <?php
+                            // Define the order status ID you want to search for
+                            $orderStatusID = 2;
 
-                        // Define the SQL query to search for orders with the specified order status ID
-                        $searchOrdersQuery = "SELECT * FROM coyote_clothing.invoice WHERE order_sts_id = $orderStatusID";
+                            // Define the SQL query to search for orders with the specified order status ID
+                            $searchOrdersQuery = "SELECT * FROM coyote_clothing.invoice WHERE order_sts_id = $orderStatusID";
 
-                        // Execute the query using the Database class
-                        $result = Database::search($searchOrdersQuery);
+                            // Execute the query using the Database class
+                            $result = Database::search($searchOrdersQuery);
 
-                        // Check if any orders were found
-                        if ($result->num_rows > 0) {
-                            // Output the details of each order found
-                            while ($row = $result->fetch_assoc()) {
-                                echo "Order ID: " . $row['id'] . ", User ID: " . $row['user_id'] . ", Total: " . $row['total'] . ", Date: " . $row['datetime'] . "<br>";
+                            // Check if any orders were found
+                            if ($result->num_rows > 0) {
+                                // Output the details of each order found
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "Order ID: " . $row['id'] . ", User ID: " . $row['user_id'] . ", Total: " . $row['total'] . ", Date: " . $row['datetime'] . "<br>";
+                                }
+                            } else {
+                                echo "No orders found with order status ID $orderStatusID.";
                             }
-                        } else {
-                            echo "No orders found with order status ID $orderStatusID.";
-                        }
 
 
 
-                        ?>
+                            ?>
 
 
-                        <!-- Begin Page Content -->
-                        <div class="container-fluid">
+                            <!-- Begin Page Content -->
+                            <div class="container-fluid">
 
-                            <!-- DataTales Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Unfulfilled Orders.</h6>
+                                <!-- DataTales Example -->
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Unfulfilled Orders.</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Position</th>
+                                                        <th>Office</th>
+                                                        <th>Age</th>
+                                                        <th>Start date</th>
+                                                        <th>Salary</th>
+                                                    </tr>
+                                                </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Position</th>
+                                                        <th>Office</th>
+                                                        <th>Age</th>
+                                                        <th>Start date</th>
+                                                        <th>Salary</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Tiger Nixon</td>
+                                                        <td>System Architect</td>
+                                                        <td>Edinburgh</td>
+                                                        <td>61</td>
+                                                        <td>2011/04/25</td>
+                                                        <td>$320,800</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Garrett Winters</td>
+                                                        <td>Accountant</td>
+                                                        <td>Tokyo</td>
+                                                        <td>63</td>
+                                                        <td>2011/07/25</td>
+                                                        <td>$170,750</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Ashton Cox</td>
+                                                        <td>Junior Technical Author</td>
+                                                        <td>San Francisco</td>
+                                                        <td>66</td>
+                                                        <td>2009/01/12</td>
+                                                        <td>$86,000</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Cedric Kelly</td>
+                                                        <td>Senior Javascript Developer</td>
+                                                        <td>Edinburgh</td>
+                                                        <td>22</td>
+                                                        <td>2012/03/29</td>
+                                                        <td>$433,060</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Airi Satou</td>
+                                                        <td>Accountant</td>
+                                                        <td>Tokyo</td>
+                                                        <td>33</td>
+                                                        <td>2008/11/28</td>
+                                                        <td>$162,700</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Brielle Williamson</td>
+                                                        <td>Integration Specialist</td>
+                                                        <td>New York</td>
+                                                        <td>61</td>
+                                                        <td>2012/12/02</td>
+                                                        <td>$372,000</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Herrod Chandler</td>
+                                                        <td>Sales Assistant</td>
+                                                        <td>San Francisco</td>
+                                                        <td>59</td>
+                                                        <td>2012/08/06</td>
+                                                        <td>$137,500</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Rhona Davidson</td>
+                                                        <td>Integration Specialist</td>
+                                                        <td>Tokyo</td>
+                                                        <td>55</td>
+                                                        <td>2010/10/14</td>
+                                                        <td>$327,900</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Colleen Hurst</td>
+                                                        <td>Javascript Developer</td>
+                                                        <td>San Francisco</td>
+                                                        <td>39</td>
+                                                        <td>2009/09/15</td>
+                                                        <td>$205,500</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Sonya Frost</td>
+                                                        <td>Software Engineer</td>
+                                                        <td>Edinburgh</td>
+                                                        <td>23</td>
+                                                        <td>2008/12/13</td>
+                                                        <td>$103,600</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Jena Gaines</td>
+                                                        <td>Office Manager</td>
+                                                        <td>London</td>
+                                                        <td>30</td>
+                                                        <td>2008/12/19</td>
+                                                        <td>$90,560</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Quinn Flynn</td>
+                                                        <td>Support Lead</td>
+                                                        <td>Edinburgh</td>
+                                                        <td>22</td>
+                                                        <td>2013/03/03</td>
+                                                        <td>$342,000</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Charde Marshall</td>
+                                                        <td>Regional Director</td>
+                                                        <td>San Francisco</td>
+                                                        <td>36</td>
+                                                        <td>2008/10/16</td>
+                                                        <td>$470,600</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Haley Kennedy</td>
+                                                        <td>Senior Marketing Designer</td>
+                                                        <td>London</td>
+                                                        <td>43</td>
+                                                        <td>2012/12/18</td>
+                                                        <td>$313,500</td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Position</th>
-                                                    <th>Office</th>
-                                                    <th>Age</th>
-                                                    <th>Start date</th>
-                                                    <th>Salary</th>
-                                                </tr>
-                                            </tfoot>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Tiger Nixon</td>
-                                                    <td>System Architect</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>61</td>
-                                                    <td>2011/04/25</td>
-                                                    <td>$320,800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Garrett Winters</td>
-                                                    <td>Accountant</td>
-                                                    <td>Tokyo</td>
-                                                    <td>63</td>
-                                                    <td>2011/07/25</td>
-                                                    <td>$170,750</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Ashton Cox</td>
-                                                    <td>Junior Technical Author</td>
-                                                    <td>San Francisco</td>
-                                                    <td>66</td>
-                                                    <td>2009/01/12</td>
-                                                    <td>$86,000</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Cedric Kelly</td>
-                                                    <td>Senior Javascript Developer</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>22</td>
-                                                    <td>2012/03/29</td>
-                                                    <td>$433,060</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Airi Satou</td>
-                                                    <td>Accountant</td>
-                                                    <td>Tokyo</td>
-                                                    <td>33</td>
-                                                    <td>2008/11/28</td>
-                                                    <td>$162,700</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Brielle Williamson</td>
-                                                    <td>Integration Specialist</td>
-                                                    <td>New York</td>
-                                                    <td>61</td>
-                                                    <td>2012/12/02</td>
-                                                    <td>$372,000</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Herrod Chandler</td>
-                                                    <td>Sales Assistant</td>
-                                                    <td>San Francisco</td>
-                                                    <td>59</td>
-                                                    <td>2012/08/06</td>
-                                                    <td>$137,500</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Rhona Davidson</td>
-                                                    <td>Integration Specialist</td>
-                                                    <td>Tokyo</td>
-                                                    <td>55</td>
-                                                    <td>2010/10/14</td>
-                                                    <td>$327,900</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Colleen Hurst</td>
-                                                    <td>Javascript Developer</td>
-                                                    <td>San Francisco</td>
-                                                    <td>39</td>
-                                                    <td>2009/09/15</td>
-                                                    <td>$205,500</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Sonya Frost</td>
-                                                    <td>Software Engineer</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>23</td>
-                                                    <td>2008/12/13</td>
-                                                    <td>$103,600</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Jena Gaines</td>
-                                                    <td>Office Manager</td>
-                                                    <td>London</td>
-                                                    <td>30</td>
-                                                    <td>2008/12/19</td>
-                                                    <td>$90,560</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Quinn Flynn</td>
-                                                    <td>Support Lead</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>22</td>
-                                                    <td>2013/03/03</td>
-                                                    <td>$342,000</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Charde Marshall</td>
-                                                    <td>Regional Director</td>
-                                                    <td>San Francisco</td>
-                                                    <td>36</td>
-                                                    <td>2008/10/16</td>
-                                                    <td>$470,600</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Haley Kennedy</td>
-                                                    <td>Senior Marketing Designer</td>
-                                                    <td>London</td>
-                                                    <td>43</td>
-                                                    <td>2012/12/18</td>
-                                                    <td>$313,500</td>
-                                                </tr>
 
-                                            </tbody>
-                                        </table>
+                            </div>
+                            <!-- /.container-fluid -->
+
+                        </div>
+                        <!-- End of Main Content -->
+
+
+
+
+                        <div class="row">
+                            <!-- Content Column -->
+                            <div class="col-lg-10 mb-4">
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.container-fluid -->
+
+                </div>
+                <!-- End of Main Content -->
+
+                <!-- Footer -->
+                <?php include 'footer.php'; ?>
+                <!-- End of Footer -->
+
+            </div>
+            <!-- End of Content Wrapper -->
+
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="login.html">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <?php
+    } else {
+    ?>
+        <div class="" id="exampleModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Admin Login</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="" id="adminPwModal">
+                        <div class="modal-body">
+                            <div class="form-group mb-3">
+                                <label class="label" for="name">Type your email to get veification code</label>
+                                <p class="text-danger" id="fpwMoadlWrn"></p>
+                                <div class="row">
+                                    <div class="col-10 offset-1">
+                                        <div class="row gap-2">
+                                            <input type="text" class="form-control col-9" placeholder="Email" required name="email" />
+                                            <button type="button" class="btn btn-primary col-2 offset-1" id="sendVcode" onclick="sendVcodefn();">Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-10 offset-1">
+                                        <div class="row gap-2">
+                                            <input type="text" class="form-control col-12" placeholder="Code" required name="vcode" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-                        <!-- /.container-fluid -->
-
-                    </div>
-                    <!-- End of Main Content -->
-
-
-
-
-                    <div class="row">
-                        <!-- Content Column -->
-                        <div class="col-lg-10 mb-4">
-
-
-
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" onclick="adminHome();">Continue</button>
                         </div>
-                    </div>
-
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <?php include 'footer.php'; ?>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    </form>
                 </div>
             </div>
         </div>
-    </div>
+    <?php
+    }
+    ?>
 
+    <script src="script.js"></script>
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
