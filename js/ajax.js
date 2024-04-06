@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then((result) => {
                     console.log(result);
                     if (result === 'present') {
-                        alert(result);//AFTER SIGNIN
+                        // alert(result);//AFTER SIGNIN
                         window.location = 'index.php';
                     } else {
                         document.getElementById("signInWarn").innerHTML = result;
