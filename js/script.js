@@ -188,105 +188,105 @@ function cartDel(event, cid) {
     .catch((error) => {});
 }
 
-// function submitCheckout(total) {
-//   var form = new FormData(document.getElementById('checkOutForm'));
-//   form.append('total', total);
-//   form.append('email', document.getElementById('emailCheckout').value);
-//   // alert(form.get("rno"));
-//   const url = 'checkOutProcess.php';
-//   const method = 'POST';
-//   const status = true;
-
-//   ajaxRequest(url, method, status, form)
-//     .then((result) => {
-//       if (/^\d{7}$/.test(result)) {
-//         const url = 'invoice.php?id=' + result;
-//         window.location = url;
-//       } else {
-//         alert(result);
-//       }
-//     })
-//     .catch((error) => {
-//       console.error('Error:', error);
-//     });
-// }
-
 function submitCheckout(total) {
-  var reciverName = document.getElementById('checkout-reciver-name').value;
-  var mobileNumber = document.getElementById('checkout-mobile-number').value;
-  var address = document.getElementById('checkout-address').value;
-  var email = document.getElementById('checkout-email').value;
-
-  var form = new FormData();
+  var form = new FormData(document.getElementById('checkOutForm'));
   form.append('total', total);
-  form.append('rname', reciverName);
-  form.append('rno', mobileNumber);
-  form.append('address', address);
-  form.append('email', email);
+  form.append('email', document.getElementById('emailCheckout').value);
+  // alert(form.get("rno"));
+  const url = 'checkOutProcess.php';
+  const method = 'POST';
+  const status = true;
 
-  var request = new XMLHttpRequest();
-
-  request.onreadystatechange = function () {
-    if (request.status == 200 && request.readyState == 4) {
-      var t = request.responseText;
-      console.log(t);
-      var obj = JSON.parse(t);
-      var email = obj['email'];
-      var amount = obj['amount'];
-      var order = obj['order_id']; // used in return_url and cancel_url line 260, 262
-
-      // Payment completed. It can be a successful failure.
-      payhere.onCompleted = function onCompleted(orderId) {
-        console.log('Payment completed. OrderID:' + orderId);
-        // Note: validate the payment and show success or failure page to the customer
-      };
-
-      // Payment window closed
-      payhere.onDismissed = function onDismissed() {
-        // Note: Prompt user to pay again or show an error page
-        console.log('Payment dismissed');
-      };
-
-      // Error occurred
-      payhere.onError = function onError(error) {
-        // Note: show an error page
-        console.log('Error:' + error);
-      };
-
-      // Put the payment variables here
-      var payment = {
-        sandbox: true,
-        merchant_id: '1221091', // Replace your Merchant ID
-        return_url:
-          'http://localhost/coyote-clothing/invoice.php?id=' + product_id, // Important
-        cancel_url:
-          'http://localhost/coyote-clothing/invoice.php?id=' + product_id, // Important
-        notify_url: 'http://sample.com/notify',
-        order_id: obj['id'],
-        items: obj['items'],
-        amount: amount,
-        currency: 'LKR',
-        hash: obj['hash'], // *Replace with generated hash retrieved from backend
-        first_name: obj['first_name'],
-        last_name: obj['last_name'],
-        email: email,
-        address: obj['address'],
-        city: obj['city'],
-        country: 'Sri Lanka',
-        delivery_address: obj['address'],
-        delivery_country: 'Sri Lanka',
-      };
-
-      // Show the payhere.js popup, when "PayHere Pay" is clicked
-      //document.getElementById('payhere-payment').onclick = function (e) {
-      payhere.startPayment(payment);
-      //};
-    }
-  };
-
-  request.open('POST', 'checkOutProcess.php', true);
-  request.send(form);
+  ajaxRequest(url, method, status, form)
+    .then((result) => {
+      if (/^\d{7}$/.test(result)) {
+        const url = 'invoice.php?id=' + result;
+        window.location = url;
+      } else {
+        alert(result);
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 }
+
+// function submitCheckout(total) {
+//   var reciverName = document.getElementById('checkout-reciver-name').value;
+//   var mobileNumber = document.getElementById('checkout-mobile-number').value;
+//   var address = document.getElementById('checkout-address').value;
+//   var email = document.getElementById('checkout-email').value;
+
+//   var form = new FormData();
+//   form.append('total', total);
+//   form.append('rname', reciverName);
+//   form.append('rno', mobileNumber);
+//   form.append('address', address);
+//   form.append('email', email);
+
+//   var request = new XMLHttpRequest();
+
+//   request.onreadystatechange = function () {
+//     if (request.status == 200 && request.readyState == 4) {
+//       var t = request.responseText;
+//       console.log(t);
+//       var obj = JSON.parse(t);
+//       var email = obj['email'];
+//       var amount = obj['amount'];
+//       var order = obj['order_id']; // used in return_url and cancel_url line 260, 262
+
+//       // Payment completed. It can be a successful failure.
+//       payhere.onCompleted = function onCompleted(orderId) {
+//         console.log('Payment completed. OrderID:' + orderId);
+//         // Note: validate the payment and show success or failure page to the customer
+//       };
+
+//       // Payment window closed
+//       payhere.onDismissed = function onDismissed() {
+//         // Note: Prompt user to pay again or show an error page
+//         console.log('Payment dismissed');
+//       };
+
+//       // Error occurred
+//       payhere.onError = function onError(error) {
+//         // Note: show an error page
+//         console.log('Error:' + error);
+//       };
+
+//       // Put the payment variables here
+//       var payment = {
+//         sandbox: true,
+//         merchant_id: '1221091', // Replace your Merchant ID
+//         return_url:
+//           'http://localhost/coyote-clothing/invoice.php?id=' + product_id, // Important
+//         cancel_url:
+//           'http://localhost/coyote-clothing/invoice.php?id=' + product_id, // Important
+//         notify_url: 'http://sample.com/notify',
+//         order_id: obj['id'],
+//         items: obj['items'],
+//         amount: amount,
+//         currency: 'LKR',
+//         hash: obj['hash'], // *Replace with generated hash retrieved from backend
+//         first_name: obj['first_name'],
+//         last_name: obj['last_name'],
+//         email: email,
+//         address: obj['address'],
+//         city: obj['city'],
+//         country: 'Sri Lanka',
+//         delivery_address: obj['address'],
+//         delivery_country: 'Sri Lanka',
+//       };
+
+//       // Show the payhere.js popup, when "PayHere Pay" is clicked
+//       //document.getElementById('payhere-payment').onclick = function (e) {
+//       payhere.startPayment(payment);
+//       //};
+//     }
+//   };
+
+//   request.open('POST', 'checkOutProcess.php', true);
+//   request.send(form);
+// }
 
 
 // function submitCheckout(total) {

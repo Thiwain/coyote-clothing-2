@@ -96,3 +96,45 @@ function adminHome() {
   }
 
 }
+
+function orderInfo(id) {
+  // alert(id);
+  const url = 'invoice.php?id=' + id;
+  window.location = url;
+}
+
+function fulfillOrder(id) {
+  // alert(id);
+  var formData = new FormData();
+  formData.append('id', id);
+  var url = 'fulfillOrderProcess.php';
+  var method = 'POST';
+  var status = true;
+  ajaxRequest(url, method, status, formData)
+    .then((result) => {
+      alert(result);
+      window.location.reload();
+    })
+    .catch((error) => {
+
+    });
+}
+
+function itemInput() {
+  var itemId = document.getElementById('itemInput').value;
+  var cat = document.getElementById('category').value;
+
+  var formData = new FormData();
+  formData.append('item', itemId);
+  formData.append('cat', cat);
+  var url = 'addItemProcess.php';
+  var method = 'POST';
+  var status = true;
+  ajaxRequest(url, method, status, formData)
+    .then((result) => {
+      alert(result);
+    })
+    .catch((error) => {
+
+    });
+}
