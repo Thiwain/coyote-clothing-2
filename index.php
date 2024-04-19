@@ -206,6 +206,72 @@
         </div>
     </section>
 
+    <!-- Start product listing with category -->
+    <div class="container">
+        <?php
+        $category_search_q = "SELECT `id`, `cat_name` FROM `category`";
+        $category_rs = Database::search($category_search_q);
+        $category_rs_num = $category_rs->num_rows;
+
+        while ($category_data = $category_rs->fetch_assoc()) {
+        ?>
+            <h3><?php echo $category_data['cat_name'] ?></h3>
+            <div class="row">
+                <?php
+                // TODO: add the other product details to the query (images)
+                $product_search_q = "
+                    SELECT
+                        product.id AS product_id,
+                        product.product_title,
+                        product.price AS product_price
+                    FROM
+                        product
+                    INNER JOIN
+                        item
+                    ON
+                        product.item_id = item.id
+                    WHERE
+                        item.category_id = " . $category_data['id'] . "
+                    ORDER BY
+                        product.id ASC
+                ";
+                $product_rs = Database::search($product_search_q);
+                $product_rs_num = $product_rs->num_rows;
+
+                if ($product_rs_num > 0) {
+                    while ($product_data = $product_rs->fetch_assoc()) {
+                ?>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg">
+                                    <ul class="product__hover">
+                                        <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
+                                        <li><a href="#" onclick="toSPV(<?php echo $product_data['product_id'] ?>);"><img src="img/icon/search.png" alt=""></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6><?php echo $product_data['product_title'] ?></h6>
+                                    <a href="#" class="add-cart" onclick="addToCartHome(<?php echo $product_data['product_id'] ?>,event);">+ Add To Cart</a>
+                                    <div class="rating"></div>
+                                    <h5><?php echo $product_data['product_price'] ?> LKR</h5>
+                                </div>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                } else {
+                    ?>
+                    <p>No products found for this category.</p>
+                <?php
+                }
+                ?>
+            </div>
+        <?php
+        }
+        ?>
+    </div>
+    <!-- End product listing with category -->
+
     <?php include "footer.php" ?>
 
     <!-- payhere lib -->
