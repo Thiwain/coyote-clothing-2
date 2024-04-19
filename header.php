@@ -12,6 +12,11 @@
 		</button>
 		<div class="collapse navbar-collapse" id="ftco-nav">
 			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<form action="search.php" method="get">
+						<input class="form-control-sm" type="text" name="search_query" placeholder="search here...">
+					</form>
+				</li>
 				<li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
 				<li class="nav-item"><a href="#" class="nav-link">Shop</a></li>
 				<li class="nav-item"><a href="#" class="nav-link">About</a></li>
